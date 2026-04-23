@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OJEE College & Branch Predictor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class'
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 min-h-screen font-sans text-gray-800 dark:text-gray-200 transition-colors duration-300">
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 relative">
+        <!-- Theme Toggle Button -->
+        <button id="themeToggle" class="fixed top-4 right-4 z-50 p-2 sm:p-3 bg-white dark:bg-gray-800 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200 dark:border-gray-700">
+            <svg id="sunIcon" class="w-5 h-5 sm:w-6 sm:h-6 text-yellow-500 hidden" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd" />
+            </svg>
+            <svg id="moonIcon" class="w-5 h-5 sm:w-6 sm:h-6 text-gray-800 dark:text-gray-200" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+            </svg>
+        </button>
+
+        <div class="text-center mb-8 sm:mb-12">
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-indigo-800 dark:text-indigo-200 mb-3 sm:mb-4 bg-gradient-to-r from-indigo-600 to-blue-600 dark:from-indigo-400 dark:to-blue-400 bg-clip-text text-transparent">OJEE College Predictor</h1>
+            <p class="text-gray-700 dark:text-gray-300 max-w-3xl mx-auto text-base sm:text-lg leading-relaxed px-4">
+                Powered by AI-driven logic and historical data. Enter your details below to see your top 30 realistic chances for engineering colleges across Odisha.
+            </p>
+        </div>
+
+        <!-- Main Content Container -->
+        <div id="mainContent" class="flex flex-col items-center justify-center min-h-[50vh] sm:min-h-[60vh] px-4">
+            <!-- Form Section (Initially Visible) -->
+            <div id="formSection" class="w-full max-w-2xl bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 backdrop-blur-sm bg-opacity-95 dark:bg-opacity-90">
+                <h2 class="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 text-center border-b-2 pb-3 sm:pb-4 text-indigo-700 dark:text-indigo-300">Enter Your Details</h2>
+                
+                <form id="predictorForm" class="space-y-4 sm:space-y-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Applicant Name</label>
+                        <input type="text" id="nameInput" required class="mt-1 w-full p-3 border-2 border-gray-300 dark:border-gray-600 rounded-xl focus:ring-4 focus:ring-indigo-300 dark:focus:ring-indigo-600 focus:border-indigo-500 dark:focus:border-indigo-400 outline-none transition-all bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 text-base" placeholder="e.g. Ranjan Sahoo">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">OJEE / JEE Rank</label>
+                        <input type="number" id="rankInput" required min="1" class="mt-1 w-full p-3 border-2 border-gray-300 dark:border-gray-600 rounded-xl focus:ring-4 focus:ring-indigo-300 dark:focus:ring-indigo-600 focus:border-indigo-500 dark:focus:border-indigo-400 outline-none transition-all bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 text-base" placeholder="e.g. 150000">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Category</label>
+                        <select id="categoryInput" class="mt-1 w-full p-3 border-2 border-gray-300 dark:border-gray-600 rounded-xl focus:ring-4 focus:ring-indigo-300 dark:focus:ring-indigo-600 focus:border-indigo-500 dark:focus:border-indigo-400 outline-none transition-all bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-base">
+                            <option value="General">General</option>
+                            <option value="EWS">EWS</option>
+                            <option value="SC">SC</option>
+                            <option value="ST">ST</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Gender</label>
+                        <select id="genderInput" class="mt-1 w-full p-3 border-2 border-gray-300 dark:border-gray-600 rounded-xl focus:ring-4 focus:ring-indigo-300 dark:focus:ring-indigo-600 focus:border-indigo-500 dark:focus:border-indigo-400 outline-none transition-all bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-base">
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </div>
+
+                    <div class="flex items-center mt-4 bg-indigo-50 dark:bg-gray-700 p-3 sm:p-4 rounded-xl border-2 border-indigo-200 dark:border-gray-600">
+                        <input type="checkbox" id="sgsCheckbox" class="w-5 h-5 text-indigo-600 rounded focus:ring-indigo-500">
+                        <label for="sgsCheckbox" class="ml-3 text-sm font-semibold text-gray-700 dark:text-gray-300">
+                            Apply SGS Quota (Govt. School)
+                        </label>
+                    </div>
+
+                    <div class="pt-4 sm:pt-6 border-t-2 mt-4 sm:mt-6">
+                        <h3 class="text-sm font-bold text-gray-500 dark:text-gray-400 uppercase mb-3 sm:mb-4">Optional Filters</h3>
+                        
+                        <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Institute Type</label>
+                        <select id="typeInput" class="mt-1 w-full p-3 border-2 border-gray-300 dark:border-gray-600 rounded-xl focus:ring-4 focus:ring-indigo-300 dark:focus:ring-indigo-600 focus:border-indigo-500 dark:focus:border-indigo-400 outline-none transition-all bg-white dark:bg-gray-700 text-gray-900 dark:text-white mb-4 text-base">
+                            <option value="Both">Both (Govt. & Private)</option>
+                            <option value="Government">Government Only</option>
+                            <option value="Private">Private Only</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="w-full bg-gradient-to-r from-indigo-600 to-blue-600 text-white font-bold py-3 sm:py-4 rounded-xl hover:from-indigo-700 hover:to-blue-700 transition-all shadow-lg transform hover:scale-105 text-base sm:text-lg">
+                        Predict Colleges
+                    </button>
+                </form>
+            </div>
+
+            <!-- Loading Section (Initially Hidden) -->
+            <div id="loadingSection" class="hidden flex flex-col items-center justify-center w-full max-w-2xl px-4">
+                <div class="bg-white dark:bg-gray-800 p-8 sm:p-12 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 text-center w-full">
+                    <svg class="animate-spin h-12 w-12 sm:h-16 sm:w-16 mx-auto mb-6 sm:mb-8 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <h3 class="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white mb-3 sm:mb-4">Analyzing Your Chances</h3>
+                    <p class="text-gray-600 dark:text-gray-300 text-sm sm:text-lg">Processing top 30 college matches...</p>
+                </div>
+            </div>
+
+            <!-- Results Section (Initially Hidden) -->
+            <div id="resultsSection" class="hidden w-full max-w-6xl px-4">
+                <div class="text-center mb-6 sm:mb-8">
+                    <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white mb-3 sm:mb-4">Your College Predictions</h2>
+                    <button id="newPredictionBtn" class="bg-gray-600 hover:bg-gray-700 text-white px-4 sm:px-6 py-2 rounded-lg transition-colors text-sm sm:text-base">
+                        ← Try New Prediction
+                    </button>
+                </div>
+                <div id="resultsContainer" class="space-y-4 sm:space-y-6">
+                    <div class="text-center py-24 bg-white dark:bg-gray-800 rounded-2xl border-2 border-dashed border-gray-300 dark:border-gray-600 text-gray-400 dark:text-gray-500 shadow-inner">
+                        Fill out the form and hit predict to see your options!
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- About Section -->
+        <div class="mt-16 sm:mt-20 bg-white dark:bg-gray-800 p-6 sm:p-8 lg:p-12 rounded-2xl shadow-xl border border-gray-200 dark:border-gray-700 mx-4 sm:mx-0">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+                <div class="space-y-4 sm:space-y-6 order-2 lg:order-1">
+                    <h2 class="text-3xl sm:text-4xl font-bold text-center lg:text-left text-indigo-700 dark:text-indigo-300 mb-2">About Me</h2>
+                    <p class="text-gray-700 dark:text-gray-300 text-base sm:text-lg leading-relaxed">
+                        Hi, I'm Ranjan, a CSE undergraduate in VSSUT and a passionate developer dedicated to helping students navigate their educational journey. This OJEE predictor tool was created to simplify college selection using data-driven insights and historical trends.
+                    </p>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm sm:text-base leading-relaxed">
+                        I've built this platform to provide accurate predictions based on real admission data. This tool helps you make informed decisions about your future.
+                    </p>
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-start gap-3 sm:gap-4">
+                        <span class="text-sm font-semibold text-gray-500 dark:text-gray-400">Connect with me:</span>
+                        <div class="flex items-center gap-3">
+                            <a href="https://github.com/Ranjan-2006" target="_blank" class="inline-flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 rounded-full border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-700 dark:text-gray-100 hover:bg-indigo-600 hover:text-white transition-colors" aria-label="Github">
+                                <svg viewBox="0 0 24 24" class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12 0.297C5.37 0.297 0 5.667 0 12.297c0 5.301 3.438 9.8 8.205 11.387.6.111.82-.261.82-.579 0-.286-.011-1.04-.017-2.042-3.338.724-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.757-1.333-1.757-1.089-.745.083-.73.083-.73 1.205.084 1.84 1.238 1.84 1.238 1.07 1.834 2.809 1.304 3.494.997.108-.775.418-1.305.76-1.605-2.665-.304-5.467-1.332-5.467-5.932 0-1.312.469-2.382 1.236-3.222-.124-.303-.536-1.523.117-3.176 0 0 1.008-.323 3.301 1.23.959-.267 1.987-.4 3.008-.404 1.02.004 2.049.137 3.009.404 2.291-1.553 3.297-1.23 3.297-1.23.655 1.653.243 2.873.119 3.176.77.84 1.235 1.91 1.235 3.222 0 4.61-2.807 5.625-5.479 5.923.43.372.814 1.102.814 2.222 0 1.606-.015 2.898-.015 3.293 0 .32.218.694.825.576C20.565 22.092 24 17.593 24 12.297 24 5.667 18.63.297 12 .297z"/></svg>
+                            </a>
+                            <a href="https://www.linkedin.com/in/ranjan-kumar-sahoo-1580822b7/" target="_blank" class="inline-flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 rounded-full border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-700 dark:text-gray-100 hover:bg-blue-600 hover:text-white transition-colors" aria-label="LinkedIn">
+                                <svg viewBox="0 0 24 24" class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.024-3.037-1.851-3.037-1.852 0-2.136 1.445-2.136 2.939v5.667H9.349V9h3.414v1.561h.049c.476-.9 1.637-1.85 3.369-1.85 3.602 0 4.268 2.368 4.268 5.452v6.289zM5.337 7.433a2.064 2.064 0 110-4.128 2.064 2.064 0 010 4.128zM6.947 20.452H3.727V9h3.22v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.226.792 24 1.771 24h20.451C23.2 24 24 23.226 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/></svg>
+                            </a>
+                            <a href="https://x.com/RanjanK3012" target="_blank" class="inline-flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 rounded-full border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 text-gray-700 dark:text-gray-100 hover:bg-slate-700 hover:text-white transition-colors" aria-label="X">
+                                <svg viewBox="0 0 24 24" class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M23.643 4.937c-.835.37-1.732.62-2.675.732a4.684 4.684 0 002.048-2.586 9.3 9.3 0 01-2.958 1.132 4.66 4.66 0 00-7.948 4.247A13.229 13.229 0 011.64 3.165a4.65 4.65 0 001.44 6.213 4.603 4.603 0 01-2.112-.583v.06a4.657 4.657 0 003.736 4.566 4.683 4.683 0 01-2.105.08 4.667 4.667 0 004.354 3.234 9.353 9.353 0 01-5.79 1.995c-.376 0-.747-.022-1.112-.065a13.21 13.21 0 007.163 2.097c8.595 0 13.295-7.123 13.295-13.296 0-.203-.005-.406-.014-.607a9.496 9.496 0 002.337-2.416z"/></svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-center lg:justify-end order-1 lg:order-2">
+                    <div class="w-48 h-48 sm:w-64 sm:h-64 lg:w-72 lg:h-72 rounded-full overflow-hidden border-4 border-indigo-200 dark:border-indigo-600 shadow-xl">
+                        <img src="my image.jpeg" alt="Ranjan Sahoo" class="w-full h-full object-cover">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Welcome Message -->
+        <div class="mt-12 sm:mt-16 text-center px-4 sm:px-0">
+            <h3 class="text-xl sm:text-2xl font-bold text-gray-800 dark:text-white mb-3 sm:mb-4">Welcome to OJEE College Predictor</h3>
+            <p class="text-gray-600 dark:text-gray-300 text-base sm:text-lg max-w-4xl mx-auto leading-relaxed">
+                Start your college selection journey today! Enter your details above to discover your personalized college recommendations powered by advanced algorithms and historical admission data.
+            </p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 dark:bg-black text-white py-12 sm:py-16 mt-16 sm:mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-12 lg:gap-16">
+                <!-- Brand Section -->
+                <div class="text-center md:text-left space-y-3 sm:space-y-4">
+                    <h3 class="text-xl sm:text-2xl font-bold text-white">OJEE College Predictor</h3>
+                    <p class="text-gray-300 text-sm leading-relaxed">
+                        Empowering students with data-driven college predictions for Odisha's engineering admissions.
+                    </p>
+                    <div class="pt-2">
+                        <p class="text-indigo-300 font-medium text-sm sm:text-base">Made with ❤️ by Ranjan</p>
+                    </div>
+                </div>
+
+                <!-- Useful Links -->
+                <div class="text-center md:text-center space-y-3 sm:space-y-4">
+                    <h4 class="text-base sm:text-lg font-semibold text-white mb-4 sm:mb-6">Official Links</h4>
+                    <div class="space-y-2 sm:space-y-3">
+                        <a href="https://ojee.nic.in/" target="_blank" class="block text-gray-300 hover:text-indigo-300 transition-colors duration-200 text-sm">
+                            OJEE Official Website
+                        </a>
+                        <a href="https://jeemain.nta.nic.in/" target="_blank" class="block text-gray-300 hover:text-indigo-300 transition-colors duration-200 text-sm">
+                            JEE Main Official
+                        </a>
+                        <a href="https://nta.ac.in/" target="_blank" class="block text-gray-300 hover:text-indigo-300 transition-colors duration-200 text-sm">
+                            NTA Website
+                        </a>
+                        <a href="https://odishajee.com/" target="_blank" class="block text-gray-300 hover:text-indigo-300 transition-colors duration-200 text-sm">
+                            Odisha JEE
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Quick Access -->
+                <div class="text-center md:text-right space-y-3 sm:space-y-4">
+                    <h4 class="text-base sm:text-lg font-semibold text-white mb-4 sm:mb-6">Quick Access</h4>
+                    <div class="space-y-2 sm:space-y-3">
+                        <a href="#mainContent" class="block text-gray-300 hover:text-indigo-300 transition-colors duration-200 text-sm">
+                            Back to Top ↑
+                        </a>
+                        <a href="mailto:contact@ojeepredictor.com" class="block text-gray-300 hover:text-indigo-300 transition-colors duration-200 text-sm">
+                            Contact Us
+                        </a>
+                        <a href="#" class="block text-gray-300 hover:text-indigo-300 transition-colors duration-200 text-sm">
+                            Privacy Policy
+                        </a>
+                        <a href="#" class="block text-gray-300 hover:text-indigo-300 transition-colors duration-200 text-sm">
+                            Terms of Service
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Copyright Section -->
+            <div class="border-t border-gray-700/50 mt-8 sm:mt-12 pt-6 sm:pt-8 text-center">
+                <p class="text-gray-400 text-xs sm:text-sm">
+                    &copy; 2026 OJEE College Predictor. All rights reserved. | Built with precision and care.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
