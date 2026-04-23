@@ -77,17 +77,17 @@ document.getElementById('predictorForm').addEventListener('submit', async functi
 
     // 1. Apply Percentage Category Buffers
     if (category === 'EWS') {
-        let deduction = originalRank * 0.10;
+        let deduction = originalRank * 0.20;
         pointRank -= deduction;
-        bufferDetails.push(`EWS (-10%)`);
+        bufferDetails.push(`EWS (-20%)`);
     } else if (category === 'SC') {
-        let deduction = originalRank * 0.25;
+        let deduction = originalRank * 0.50;
         pointRank -= deduction;
-        bufferDetails.push(`SC (-25%)`);
+        bufferDetails.push(`SC (-50%)`);
     } else if (category === 'ST') {
-        let deduction = originalRank * 0.40;
+        let deduction = originalRank * 0.80;
         pointRank -= deduction;
-        bufferDetails.push(`ST (-40%)`);
+        bufferDetails.push(`ST (-80%)`);
     }
 
     // 2. Apply Flat Buffers
