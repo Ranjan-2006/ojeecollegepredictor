@@ -37,6 +37,24 @@ document.getElementById('newPredictionBtn').addEventListener('click', () => {
 });
 
 // ─────────────────────────────────────────────
+//  SGS Info Toggle
+// ─────────────────────────────────────────────
+const sgsInfoBtn = document.getElementById('sgsInfoBtn');
+const sgsInfoText = document.getElementById('sgsInfoText');
+if (sgsInfoBtn && sgsInfoText) {
+    sgsInfoBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        sgsInfoText.classList.toggle('hidden');
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!sgsInfoText.contains(e.target) && e.target !== sgsInfoBtn) {
+            sgsInfoText.classList.add('hidden');
+        }
+    });
+}
+
+// ─────────────────────────────────────────────
 //  Supabase
 // ─────────────────────────────────────────────
 const SUPABASE_URL = 'https://brhtwekbrsgqbcpolbyc.supabase.co';

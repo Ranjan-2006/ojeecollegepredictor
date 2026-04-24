@@ -296,13 +296,23 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="flex items-end">
-                                    <label class="ckb-wrap pb-2">
-                                        <input type="checkbox" id="sgsCheckbox" class="ckb">
-                                        <span class="text-sm">
-                                            SGS Quota
-                                        </span>
-                                    </label>
+                                <div class="flex flex-col justify-end">
+                                    <div class="flex items-center gap-2 pb-2 relative">
+                                        <label class="ckb-wrap">
+                                            <input type="checkbox" id="sgsCheckbox" class="ckb">
+                                            <span class="text-sm">SGS Quota</span>
+                                        </label>
+                                        <button type="button" id="sgsInfoBtn" class="text-faint hover:text-ink dark:text-faint-dark dark:hover:text-ink-dark transition-colors focus:outline-none" aria-label="SGS Quota Info">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                        </button>
+
+                                        <!-- Popup Tooltip -->
+                                        <div id="sgsInfoText" class="hidden absolute left-1/2 bottom-full mb-3 -translate-x-1/2 w-[240px] p-3 rounded-lg shadow-2xl bg-surface dark:bg-surface-dark border border-rule dark:border-rule-dark text-xs text-ink dark:text-ink-dark leading-relaxed z-50">
+                                            Eligibility: Pass both Class 10th and 12th from an Odisha State Government School.
+                                            <!-- Tooltip Pointer -->
+                                            <div class="absolute w-3 h-3 bg-surface dark:bg-surface-dark border-b border-r border-rule dark:border-rule-dark transform rotate-45 left-1/2 -bottom-[6px] -translate-x-1/2"></div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
