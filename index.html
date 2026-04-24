@@ -478,6 +478,12 @@
                             Cutoffs are pulled from publicly available OJEE counseling records going back five admissions cycles. The buffer logic for reservations, SGS, and gender follows the standard weightage applied in past rounds.
                         </p>
                     </div>
+                    <div class="mt-8">
+                        <button id="coffeeBtn" class="inline-flex items-center gap-2 px-5 py-2.5 bg-accent dark:bg-accent-dark text-white hover:opacity-90 transition-opacity font-medium text-sm rounded-md shadow-sm">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                            Buy me a coffee
+                        </button>
+                    </div>
                     <div class="flex items-center gap-5 mt-10 smallcaps text-muted dark:text-muted-dark">
                         <span>Find me —</span>
                         <a href="https://github.com/Ranjan-2006" target="_blank" rel="noopener" aria-label="Github" class="hover:text-ink dark:hover:text-ink-dark transition-colors">
@@ -540,6 +546,26 @@
             </div>
         </div>
     </footer>
+
+    <!-- ═══════════════════════════════════════════════ COFFEE MODAL ═══════════════════════════════════════════════ -->
+    <div id="coffeeModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/30 dark:bg-canvas-dark/80 backdrop-blur-sm">
+        <div class="bg-surface dark:bg-surface-dark border border-rule dark:border-rule-dark p-6 lg:p-8 max-w-sm w-full relative rise shadow-2xl rounded-xl">
+            <button id="closeCoffeeBtn" class="absolute top-4 right-4 text-faint dark:text-faint-dark hover:text-ink dark:hover:text-ink-dark transition-colors">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+            <div class="text-center">
+                <h3 class="font-display text-2xl mb-2 text-ink dark:text-ink-dark">Buy me a coffee ☕</h3>
+                <p class="text-sm text-muted dark:text-muted-dark mb-6">Scan the QR code to send ₹10 via UPI, or tap the button below if you're on your phone.</p>
+                <div class="w-48 h-48 mx-auto bg-white p-2 border border-rule dark:border-rule-dark mb-6 rounded-lg">
+                    <!-- Replace qr-code.png with your actual QR code image -->
+                    <img src="qr_code.jpeg" alt="UPI QR Code" class="w-full h-full object-contain">
+                </div>
+                <a href="upi://pay?pa=7682080352@slc&pn=Ranjan%20Sahoo&am=10&cu=INR" class="btn-primary w-full justify-center rounded-lg">
+                    Pay ₹10 via UPI App
+                </a>
+            </div>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>

@@ -374,3 +374,26 @@ function escapeHtml(str) {
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&#39;');
 }
+
+// ─────────────────────────────────────────────
+//  Coffee Modal Logic
+// ─────────────────────────────────────────────
+const coffeeBtn = document.getElementById('coffeeBtn');
+const closeCoffeeBtn = document.getElementById('closeCoffeeBtn');
+const coffeeModal = document.getElementById('coffeeModal');
+
+if (coffeeBtn && closeCoffeeBtn && coffeeModal) {
+    coffeeBtn.addEventListener('click', () => {
+        coffeeModal.classList.remove('hidden');
+    });
+
+    closeCoffeeBtn.addEventListener('click', () => {
+        coffeeModal.classList.add('hidden');
+    });
+
+    coffeeModal.addEventListener('click', (e) => {
+        if (e.target === coffeeModal) {
+            coffeeModal.classList.add('hidden');
+        }
+    });
+}
