@@ -568,6 +568,18 @@
         </div>
     </div>
 
+    <!-- Custom Amount Prompt Modal -->
+    <div id="coffeePromptModal" class="hidden fixed inset-0 z-[60] flex items-center justify-center p-4 bg-ink/30 dark:bg-canvas-dark/80 backdrop-blur-sm">
+        <div class="bg-surface dark:bg-surface-dark border border-rule dark:border-rule-dark p-6 max-w-xs w-full relative rise shadow-2xl rounded-xl text-center">
+            <h3 class="font-display text-xl mb-4 text-ink dark:text-ink-dark">Enter Amount (₹)</h3>
+            <input type="number" id="coffeeAmountInput" inputmode="numeric" pattern="[0-9]*" class="field num text-center text-2xl w-full mb-6 py-3" placeholder="0">
+            <div class="flex gap-3">
+                <button id="cancelCoffeePrompt" class="btn-secondary w-1/2 justify-center rounded-lg">Cancel</button>
+                <button id="confirmCoffeePrompt" class="btn-primary w-1/2 justify-center rounded-lg">Continue</button>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>

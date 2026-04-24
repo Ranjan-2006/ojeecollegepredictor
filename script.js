@@ -399,13 +399,37 @@ if (coffeeBtn && closeCoffeeBtn && coffeeModal) {
 }
 
 const payUpiBtn = document.getElementById('payUpiBtn');
-if (payUpiBtn) {
+const coffeePromptModal = document.getElementById('coffeePromptModal');
+const coffeeAmountInput = document.getElementById('coffeeAmountInput');
+const cancelCoffeePrompt = document.getElementById('cancelCoffeePrompt');
+const confirmCoffeePrompt = document.getElementById('confirmCoffeePrompt');
+
+if (payUpiBtn && coffeePromptModal) {
     payUpiBtn.addEventListener('click', () => {
-        const amount = prompt('Enter amount to support (₹):', '10');
-        if (amount !== null && amount.trim() !== '') {
+        coffeeAmountInput.value = ''; 
+        coffeePromptModal.classList.remove('hidden');
+        setTimeout(() => coffeeAmountInput.focus(), 100);
+    });
+
+    cancelCoffeePrompt.addEventListener('click', () => {
+        coffeePromptModal.classList.add('hidden');
+    });
+
+    confirmCoffeePrompt.addEventListener('click', () => {
+        const amount = coffeeAmountInput.value.trim();
+        if (amount && Number(amount) > 0) {
             const upiId = '7682080352@slc';
             const name = 'Ranjan Sahoo';
-            window.location.href = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(name)}&am=${amount.trim()}&cu=INR`;
+            window.location.href = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(name)}&am=${amount}&cu=INR`;
+            coffeePromptModal.classList.add('hidden');
+        } else {
+            coffeeAmountInput.focus();
+        }
+    });
+
+    coffeePromptModal.addEventListener('click', (e) => {
+        if (e.target === coffeePromptModal) {
+            coffeePromptModal.classList.add('hidden');
         }
     });
 }
