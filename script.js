@@ -53,9 +53,6 @@ const fmt = (n) => {
 
 // ─────────────────────────────────────────────
 //  Utility: normalize phone to 10-digit Indian mobile
-//  Accepts: +918328843274, 08328843274, 83288 43274,
-//           8328 8432 74, +91-8328-843274, etc.
-//  Returns: "8328843274" or null if invalid
 // ─────────────────────────────────────────────
 function normalizePhone(raw) {
     if (!raw) return null;
