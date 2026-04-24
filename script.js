@@ -397,3 +397,14 @@ if (coffeeBtn && closeCoffeeBtn && coffeeModal) {
         }
     });
 }
+
+const payUpiBtn = document.getElementById('payUpiBtn');
+const coffeeAmountInput = document.getElementById('coffeeAmountInput');
+if (payUpiBtn && coffeeAmountInput) {
+    payUpiBtn.addEventListener('click', () => {
+        const amount = coffeeAmountInput.value || '10';
+        const upiId = '7682080352@slc';
+        const name = 'Ranjan Sahoo';
+        window.location.href = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(name)}&am=${amount}&cu=INR`;
+    });
+}
