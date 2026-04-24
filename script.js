@@ -52,22 +52,94 @@ const fmt = (n) => {
 };
 
 // ─────────────────────────────────────────────
+//  Utility: normalize phone to 10-digit Indian mobile
+//  Accepts: +918328843274, 08328843274, 83288 43274,
+//           8328 8432 74, +91-8328-843274, etc.
+//  Returns: "8328843274" or null if invalid
+// ─────────────────────────────────────────────
+function normalizePhone(raw) {
+    if (!raw) return null;
+    // Strip every non-digit character (spaces, +, -, parens, etc.)
+    const digits = String(raw).replace(/\D/g, '');
+    if (digits.length < 10) return null;
+    // Always take the last 10 digits — this handles +91, 091, 0, 91 prefixes
+    const last10 = digits.slice(-10);
+    // Indian mobile numbers must start with 6, 7, 8, or 9
+    if (!/^[6-9]\d{9}$/.test(last10)) return null;
+    return last10;
+}
+
+// ─────────────────────────────────────────────
+//  Utility: basic email sanity check
+// ─────────────────────────────────────────────
+function isValidEmail(str) {
+    if (!str) return false;
+    return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(str.trim());
+}
+
+// ─────────────────────────────────────────────
+//  Utility: show/hide inline form error
+// ─────────────────────────────────────────────
+function showFormError(msg) {
+    const el = document.getElementById('formError');
+    el.textContent = msg;
+    el.classList.remove('hidden');
+}
+function clearFormError() {
+    const el = document.getElementById('formError');
+    el.textContent = '';
+    el.classList.add('hidden');
+}
+
+// ─────────────────────────────────────────────
 //  Form submit
 // ─────────────────────────────────────────────
 document.getElementById('predictorForm').addEventListener('submit', async function (e) {
     e.preventDefault();
-
-    document.getElementById('heroSection').classList.add('hidden');
-    document.getElementById('loadingSection').classList.remove('hidden');
-    document.getElementById('resultsSection').classList.add('hidden');
+    clearFormError();
 
     // Capture inputs
     const applicantName = document.getElementById('nameInput').value.trim() || 'Applicant';
+    const rawPhone      = document.getElementById('phoneInput').value;
+    const rawEmail      = document.getElementById('emailInput').value.trim();
     const originalRank  = parseInt(document.getElementById('rankInput').value);
     const category      = document.getElementById('categoryInput').value;
     const gender        = document.getElementById('genderInput').value;
     const isSGS         = document.getElementById('sgsCheckbox').checked;
     const prefType      = document.getElementById('typeInput').value;
+
+    // ─── VALIDATION ───
+    const phone = normalizePhone(rawPhone);
+    if (!phone) {
+        showFormError('Please enter a valid 10-digit Indian mobile number (starting with 6, 7, 8, or 9).');
+        document.getElementById('phoneInput').focus();
+        return;
+    }
+    if (!isValidEmail(rawEmail)) {
+        showFormError('Please enter a valid email address.');
+        document.getElementById('emailInput').focus();
+        return;
+    }
+
+    // Show loading state
+    document.getElementById('heroSection').classList.add('hidden');
+    document.getElementById('loadingSection').classList.remove('hidden');
+    document.getElementById('resultsSection').classList.add('hidden');
+
+    // ─── STORE APPLICANT (upsert on mobile_no primary key) ───
+    // Fire-and-log: we don't block the prediction if the insert fails.
+    try {
+        const { error: saveError } = await supabaseClient.rpc('save_applicant', {
+    p_mobile_no: phone,
+    p_name:      applicantName,
+    p_email:     rawEmail,
+    p_category:  category,
+    p_rank:      originalRank,
+});
+if (saveError) console.error('Applicant save error:', saveError);
+    } catch (err) {
+        console.error('Applicant save threw:', err);
+    }
 
     // ─── MATH PHASE (unchanged) ───
     let pointRank = originalRank;
